@@ -373,3 +373,28 @@ Exemples:
 - Vendredi 10 octobre, 23:59: le nom de votre modèle HuggingFace sequence -> {"ask_RAG" ou "send_message"}
 - Dimanche 12 octobre, 23:59: le nom de votre modèle HuggingFace sentence -> label ["person", "content"] by token
 - Dimanche 26 octobre, 23:59: un fichier virtual_assistant.py avec une fonction "call_virtual_assistant(user_query: str) -> dict"
+
+## TD 6: Travail collectif: RAG sur les films
+
+Nous allons développer un nouveau RAG, qui répondra aux questions sur les films. <br/>
+Je fournis:
+- un [fichier zip](https://drive.google.com/file/d/19udLiCp6HdEEzsq_NQBeImXSmoBKTBov/view?usp=sharing) avec les pages wikipedia de divers films.
+- un dataframe avec un set de question - text à trouver dans les sources - réponse attendue
+- le code src_rag/ avec un modèle de RAG et un script evaluate.py qui évalue le RAG et pousse les résultats sur mlflow
+
+L'idée est de se répartir les "idées d'amélioration". <br/>
+Formez des groupes, d'au moins 4 et max 8 <br/>
+Lorsque quelqu'un a amélioré le RAG, il peut en informer les autres qui intègrent son travail. <br/>
+Itérez pour avoir le meilleur MRR
+
+A faire:
+- Changer config.yml.example en config.yml. Y ajouter une api_key Groq pour pouvoir générer le texte
+- Run the code
+```
+from src_rag import evaluate
+evaluate.run_evaluate_retrieval(config={})
+```
+Ceci doit marcher et vous pousser une expérimentation ML-Flow locale
+- Pour votre groupe, ayez votre clone github du cours, ou vous pourrez pousser de nouvelles features
+
+Changer la taille des chunks, overlap, small2Big, embedding de sorte à avoir le meilleur MRR / reply accuracy
