@@ -19,9 +19,6 @@ FOLDER = Path("data") / "raw" / "movies" / "wiki"
 FILENAMES = [
     FOLDER / title for title in ["Inception.md", "The Dark Knight.md", "Deadpool.md", "Fight Club.md", "Pulp Fiction.md", "Titanic.md", "Avengers: Infinity War.md", "Seven Samurai.md"]
 ]
-FILENAMES = [
-    FOLDER / title for title in ["Inception.md"]
-]
 DF = pd.read_csv("data/raw/movies/questions.csv", sep=";") 
 
 ENCODER = SentenceTransformer('all-MiniLM-L6-v2')
@@ -35,7 +32,7 @@ _load_ml_flow(CONF)
 
 def run_evaluate_retrieval(config, rag=None):
     rag = rag or models.get_model(config)
-    score = evaluate_retrieval(rag, FILENAMES, DF.dropna().sample(10))
+    score = evaluate_retrieval(rag, FILENAMES, DF.dropna())
 
     description = str(config["model"])
     _push_mlflow_result(score, config, description)
@@ -157,6 +154,6 @@ def calc_semantic_similarity(generated_answer: str, reference_answer: str) -> fl
 
 if __name__ == "__main__":
     model_config = {"chunk_size": 512}
-    run_evaluate_retrieval({"model": model_config})
-    # run_evaluate_reply({"model": model_config})
+    # run_evaluate_retrieval({"model": model_config})
+    run_evaluate_reply({"model": model_config})
 
