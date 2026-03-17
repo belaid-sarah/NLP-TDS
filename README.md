@@ -179,7 +179,6 @@ Vous avez entraîné un modèle français prédisant si un mot est un nom de per
 - Vos prediction sur le jeu de données France Inter
 - Le nom de votre modèle sur HuggingFace
 
-
 # NLP TD 3: Prompt Engineering
 
 On revient au problème d'identifier les noms de comiques dans des noms de video France Inter.
@@ -206,7 +205,7 @@ uv run python src/llm_call.py
 
 ## Etapes
 
-1. Faites une fonction video_name: str -> comic_names: list[str] qui extrait les noms de comiques d'un nom de video. <br/>
+1. Faites une fonction video_name: str -> comic_name: str qui extrait les noms de comiques d'un nom de video. <br/>
 En utilisant "structured output".<br/>
 Le résultat peut être une liste de vide.
 
@@ -247,3 +246,27 @@ list(titres de videos) -> list(noms de comiques)
 Vous enverrez un CSV video_name,comic_names sortant les prédictions de votre few-shot learner.
 
 Vous enverrez votre rapport montrant les expérimentations et ce qui a marché.
+
+# NLP TD 4: RAG
+
+Vous allez créer un RAG pour une école d'informatique. </br>
+Le RAG répond aux questions des étudiants sur les cours en se servant des fiches descriptives de chaque cours. </br>
+Tout est dans le notebook notebook/RAG.ipynb
+
+Voici la [liste de questions](https://drive.google.com/file/d/14hZ0hTx5dM1WgJYewZsn9BkHzEReq-pj/view?usp=sharing) que je poserai au RAG. </br>
+
+### Après 30 minutes
+
+Vous avez testé  plusieurs chunking size<br/>
+**-1 point si non fait après 30 minutes**<br/>
+**0 au TD si non fait après 1 heure**
+
+### Après 1 heure
+
+Vous avez implémenté Small2Big<br/>
+**-1 point si non fait après 1 heure**
+
+# A rendre
+- Le notebook de votre RAG
+- un CSV avec question,embedding,rag_reply
+- un CSV avec chunk,embedding
