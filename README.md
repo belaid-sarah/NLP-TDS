@@ -398,3 +398,7 @@ Ceci doit marcher et vous pousser une expérimentation ML-Flow locale
 - Pour votre groupe, ayez votre clone github du cours, ou vous pourrez pousser de nouvelles features
 
 Changer la taille des chunks, overlap, small2Big, embedding de sorte à avoir le meilleur MRR / reply accuracy
+
+A rendre:
+- Code dans src_rag/
+- Rapport sur les différentes méthodes utilisées, leurs performances (MRR, reply similarity)
