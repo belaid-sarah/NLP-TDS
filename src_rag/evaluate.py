@@ -10,7 +10,7 @@ from time import sleep
 
 from src_rag import models
 
-FOLDER = Path("data") / "raw" / "movies" / "wiki"
+FOLDER = Path("td8") / "wiki"
 FILENAMES = [
     FOLDER / title
     for title in [
@@ -29,7 +29,7 @@ _ENCODER = None
 def _get_df():
     global _DF
     if _DF is None:
-        _DF = pd.read_csv("data/raw/movies/questions.csv", sep=";")
+        _DF = pd.read_csv("td8/questions.csv", sep=";")
     return _DF
 
 
