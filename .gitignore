@@ -1,3 +1,7 @@
 data/
 __pycache__/
 *~
+config.yml
+.venv/
+*.pyc
+mlruns/
