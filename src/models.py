@@ -1,7 +1,7 @@
+import torch
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.pipeline import Pipeline
-import torch
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 
 
@@ -34,24 +34,50 @@ class MyModel():
 
         return self._clf.predict(X)
 
-def predict_at_word_level(
-    words: list[str],
-    model: AutoModelForTokenClassification,
-    tokenizer: AutoTokenizer,
-) -> list[int]:
-    inputs = tokenizer(words, return_tensors="pt", is_split_into_words=True)
-    
-    logits = model(**inputs).logits
-    predictions = torch.argmax(logits, dim=2)
 
-    word_labels = []
-    word_ids = inputs.word_ids()
-    previous_word_idx = None
-    for idx, word_idx in enumerate(word_ids):
-        if word_idx is None:
-            continue
-        if word_idx != previous_word_idx:
-            word_labels.append(predictions[0][idx].item())
-            previous_word_idx = word_idx
-    
-    return word_labels
+def predict_at_word_level(model, tokenizer, text: str) -> list:
+    """
+    Run a TokenClassification model and return word-level predictions,
+    collapsing sub-word tokens back to the original words.
+
+    Args:
+        model:     AutoModelForTokenClassification (HuggingFace)
+        tokenizer: matching tokenizer
+        text:      raw sentence (words separated by spaces)
+
+    Returns:
+        list of {"word": str, "label": str}
+
+    Example:
+        >>> preds = predict_at_word_level(model, tokenizer, "Ask the python teacher when is the next class")
+        >>> preds
+        [{"word": "Ask",     "label": "O"},
+         {"word": "the",     "label": "B-person"},
+         {"word": "python",  "label": "I-person"},
+         {"word": "teacher", "label": "I-person"},
+         {"word": "when",    "label": "B-content"},
+         ...]
+    """
+    words = text.split()
+    enc = tokenizer(
+        words,
+        is_split_into_words=True,
+        return_tensors="pt",
+        truncation=True,
+        max_length=128,
+    )
+    word_ids = enc.word_ids()
+
+    with torch.no_grad():
+        logits = model(**enc).logits[0]
+
+    pred_ids = logits.argmax(-1).tolist()
+    id2label = model.config.id2label
+
+    # Keep only the first sub-token prediction for each word
+    word_preds: dict[int, str] = {}
+    for tok_idx, wid in enumerate(word_ids):
+        if wid is not None and wid not in word_preds:
+            word_preds[wid] = id2label[pred_ids[tok_idx]]
+
+    return [{"word": w, "label": word_preds.get(i, "O")} for i, w in enumerate(words)]
